@@ -52,10 +52,13 @@ order by Blood_Type_Count desc
 
 Q8--Find the percentage of patients in all type of medical conditions, order the results in desc order 
 
-select Blood_Type,count(Blood_Type) as Blood_Type_Count 
-from healthcare 
-group by Blood_Type
-order by blood_type_count desc
+with cte1 as(
+select distinct Medical_Condition,count(name) as no_of_patients
+from healthcare
+group by Medical_Condition),
+cte2 as(select sum(no_of_patients) as total from cte1)
+select medical_condition,(no_of_patients*100.0/total) as patient_percentage from cte1,cte2
+order by patient_percentage desc
 
 Q9--Find the most common health condition among the patients above the age of 55
 
